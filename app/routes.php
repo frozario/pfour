@@ -12,6 +12,33 @@
 */
 
 Route::get('/', function()
-{
-	return View::make('hello');
-});
+	{
+		return View::make('landing');
+	});
+
+	
+Route::get('/textgen', function()
+	{
+
+  	  return View::make('loremform');
+
+	});
+
+Route::post('/textgen', function()
+	{
+		$data = Input::all();
+		return View::make('loremresult', $data);
+	});
+
+Route::get('/usergen', function()
+	{
+
+    	return View::make('userform');
+
+	});
+
+Route::post('/usergen', function()
+	{
+		$data = Input::all();
+		return View::make('userresult', $data);
+	});
