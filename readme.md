@@ -1,6 +1,6 @@
 Live URL:
 
-http://pthree.dwa15-frozario.me
+http://p3.dwa15-frozario.me
 
 Description:
 
@@ -8,7 +8,7 @@ This application includes Lorem Ipsum and fake user generator.
 
 Demo:
 
-
+http://screencast.com/t/DhS6pZeRcx
 
 Details for Teaching Team:
 
