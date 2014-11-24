@@ -1,6 +1,3 @@
-# README for Project 4: Concoction Keeper
-## Live URL of the project:
-http://lmfilman-dwa15-p4.gopagoda.com
 ## Description:
 A Laravel web application which allows users to manage their own personal cookbook.  Users can add new recipes (or "concoctions") and search ones they've added before when they need to find a meal to fit their needs.  
 
