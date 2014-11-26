@@ -1,5 +1,5 @@
-@extends('_5_view_concoction')
+@extends('_5_view_juice')
 
-@section('view_concoction_content')
-	<div>Please select a concoction or add a new one.</div>
+@section('view_juice_content')
+	<p class="text-center">Select a Juice or add a new one.</p>
 @stop

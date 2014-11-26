@@ -45,6 +45,7 @@ Route::get('/sign-up', array('before'=>'guest', function()
 
 Route::post('/sign-up', array('before' => 'csrf', function()
 {
+
 	$user = new User();
 	$user->name = Input::get('name');
 	$user->email = Input::get('email');
@@ -85,99 +86,79 @@ Route::post('/sign-up', array('before' => 'csrf', function()
 	
 }));
 
-Route::get('/add-concoction', array('before' => 'auth', function()
+Route::get('/add-juice', array('before' => 'auth', function()
 {
-	return View::make('add_concoction')
+	return View::make('add_juice')
 		->with('user_input_error', false)
 		->with('user_input_error_message', '')	
 		->with('title', '')
-		->with('reference_link', '')
 		->with('image_file_name', '')
+		->with('day', '')
+		->with('day_part', '')
 		->with('ingredients', '')
 		->with('directions', '')
-		->with('concoction_tag_names', array())
-		->with('user_made_this', false)
 		;
 }));
 
-Route::post('/add-concoction', array('before' => 'auth', function()
+Route::post('/add-juice', array('before' => 'auth', function()
 {
 	$user_input_error = false;
 	$user_input_error_message = "";
 	$title = trim(Input::get('title'));
-	$reference_link = trim(Input::get('reference_link')); //Not required
 
 	//Move file to /public/images & Store file name in database
-	$image_file_name = "";
-	if (Input::hasFile('file')){
-		$filename = str_random(12) . ".jpg";
-		$file = Input::file('file')->move(public_path() ."/images", $filename);
-		$image_file_name = $filename;
-	}
+	$image_file_name = trim(Input::get('image_file_name'));
 
 	$ingredients = trim(Input::get('ingredients'));
 	$directions = trim(Input::get('directions'));
+	$day= trim(Input::get('day'));
+	$day_part= trim(Input::get('day_part'));
 
-	$user_made_this = Input::get('user_made_this');
 
 	//Form validation
 	if ($title === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs a title!";
+		$user_input_error_message = "Your Juice needs a title!";
 	}
 	elseif ($ingredients === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs ingredients!";
+		$user_input_error_message = "Your Juice needs ingredients!";
 	}
 	elseif ($directions === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs directions!";
+		$user_input_error_message = "Your Juice needs directions!";
 	}
 
 	//Get tag names
-	$tag_names = array();
-	$all_tags = Tag::all();
-	foreach ($all_tags as $tag){
-		$tag_name = $tag->name;
-		$checked_tag = Input::get($tag_name);
-		if ($checked_tag){
-			array_push($tag_names, $tag_name);
-		}
-	}
 
 	if ($user_input_error){
 
-		return View::make('add_concoction')
+		return View::make('add-juice')
 			->with('user_input_error', $user_input_error)
 			->with('user_input_error_message', $user_input_error_message)	
 			->with('title', $title)
-			->with('reference_link', $reference_link)
+			->with('day', $day)
+			->with('day_part', $day_part)
 			->with('ingredients', $ingredients)
 			->with('image_file_name', $image_file_name)
 			->with('directions', $directions)
-			->with('concoction_tag_names', $tag_names)
-			->with('user_made_this', $user_made_this)
 			;
 	} else {
 
 		$user = Auth::user();
 
-		$concoction = new Concoction;
-		$concoction->title = $title;
-		$concoction->reference_link = $reference_link;
-		$concoction->image_file_name = $image_file_name;
-		$concoction->ingredients = $ingredients;
-		$concoction->directions = $directions;
+        $juice = new Juice();
+        $juice->title = $title;
+        $juice->image_file_name = $image_file_name;
+        $juice->ingredients = $ingredients;
+        $juice->day = $day;
+        $juice->day_part = $day_part;
+        $juice->directions = $directions;
 
-		$concoction->user_made_this = ($user_made_this == 'on' ? true : false);
 
-		$concoction->user()->associate($user);
-		$concoction->save();
+		$juice->user()->associate($user);
+        $juice->save();
 
-		foreach ($tag_names as $tag_name){
-			$tag = Tag::where('name', '=', $tag_name)->first();
-			$concoction->tags()->attach($tag);
-		}
 
 
 		return Redirect::to('/overview');
@@ -186,80 +167,55 @@ Route::post('/add-concoction', array('before' => 'auth', function()
 	
 }));
 
-Route::get('/delete-concoction/{id}', array('before' => 'auth|editor', function($id)
+Route::get('/delete-juice/{id}', array('before' => 'auth|editor', function($id)
 {
 	
-	$concoction = Concoction::findOrFail($id);
+	$juice = Juice::findOrFail($id);
 	//Detach all tags
-	$old_concoction_tags = $concoction->tags;
-	foreach ($old_concoction_tags as $tag){
-		$concoction->tags()->detach($tag);
-	}
-	$concoction->delete();
+    $juice->delete();
 
 	return Redirect::to('/overview');
 
 }));
 
-Route::get('/edit-concoction/{id}', array('before' => 'auth|editor', function($id)
+Route::get('/edit-juice/{id}', array('before' => 'auth|editor', function($id)
 {
-	//Get concoction from database by id
-	$concoction = Concoction::findOrFail($id);
+	//Get juice from database by id
+	$juice = Juice::findOrFail($id);
 
 	//Get tag names
-	$concoction_tag_objects = $concoction->tags;
-	$concoction_tag_names = array();
-	foreach ($concoction_tag_objects as $tag){
-		array_push($concoction_tag_names, $tag->name);
-	}
 
-	return View::make('edit_concoction')
+	return View::make('edit_juice')
 		->with('user_input_error', false)
 		->with('user_input_error_message', '')	
-		->with('title', $concoction->title)
-		->with('reference_link', $concoction->reference_link)
-		->with('image_file_name', $concoction->image_file_name)
-		->with('ingredients', $concoction->ingredients)
-		->with('directions', $concoction->directions)
-		->with('concoction_tag_names', $concoction_tag_names)
-		->with('user_made_this', $concoction->user_made_this)
+		->with('title', $juice->title)
+		->with('day', $juice->day)
+		->with('day_part', $juice->day_part)
+		->with('image_file_name', $juice->image_file_name)
+		->with('ingredients', $juice->ingredients)
+		->with('directions', $juice->directions)
 
 		->with('id', $id)
 		;	
 
 }));
 
-Route::post('/edit-concoction/{id}', array('before' => 'auth|editor', function($id)
+Route::post('/edit-juice/{id}', array('before' => 'auth|editor', function($id)
 {
 	$user_input_error = false;
 	$user_input_error_message = "";
 	$title = trim(Input::get('title'));
-	$reference_link = trim(Input::get('reference_link')); //Not required
+	$image_file_name = trim(Input::get('image_file_name'));
 
-	$image_file_name = "";
-	if (Input::hasFile('file')){
-		$filename = str_random(12) . ".jpg";
-		$file = Input::file('file')->move(public_path() ."/images", $filename);
-		$image_file_name = $filename;
-	}
 	if ($image_file_name == ""){
-		$concoction = Concoction::findOrFail($id);
-		$image_file_name = $concoction->image_file_name;	
+		$juice = Juice::findOrFail($id);
+		$image_file_name = $juice->image_file_name;
 	}
 
 	$ingredients = trim(Input::get('ingredients'));
 	$directions = trim(Input::get('directions'));
-	
-	//Get tag names
-	$tag_names = array();
-	$all_tags = Tag::all();
-	foreach ($all_tags as $tag){
-		$tag_name = $tag->name;
-		$checked_tag = Input::get($tag_name);
-		if ($checked_tag){
-			array_push($tag_names, $tag_name);
-		}
-	}
+	$day = trim(Input::get('day'));
+	$day_part = trim(Input::get('day_part'));
 
 	$user_made_this = Input::get('user_made_this');
 
@@ -267,56 +223,46 @@ Route::post('/edit-concoction/{id}', array('before' => 'auth|editor', function($
 	//Form validation
 	if ($title === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs a title!";
+		$user_input_error_message = "Your Juice needs a title!";
 	}
 	elseif ($ingredients === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs ingredients!";
+		$user_input_error_message = "Your Juice needs ingredients!";
 	}
 	elseif ($directions === '') {
 		$user_input_error = true;
-		$user_input_error_message = "Your Concoction needs directions!";
+		$user_input_error_message = "Your Juice needs directions!";
 	}
 
 	if ($user_input_error){
-		return View::make('edit_concoction')
+		return View::make('edit_juice')
 			->with('user_input_error', $user_input_error)
 			->with('user_input_error_message', $user_input_error_message)	
 			->with('title', $title)
-			->with('reference_link', $reference_link)
 			->with('image_file_name', $image_file_name)
+			->with('day', $day)
+			->with('day_part', $day_part)
 			->with('ingredients', $ingredients)
 			->with('directions', $directions)
-			->with('concoction_tag_names', $tag_names)
-			->with('user_made_this', $user_made_this)
 			->with('id', $id)
 			;
 	} else {
 		//DIFFERENT FROM ADD::::
-		$concoction = Concoction::findOrFail($id);
+		$juice = Juice::findOrFail($id);
 
-		$concoction->title = $title;
-		$concoction->reference_link = $reference_link;
-		
-		$concoction->image_file_name = $image_file_name;
+        $juice->title = $title;
 
-		$concoction->ingredients = $ingredients;
-		$concoction->directions = $directions;
-		
-		$concoction->user_made_this = ($user_made_this == 'on' ? true : false);
+        $juice->image_file_name = $image_file_name;
 
-		$concoction->save();
+        $juice->ingredients = $ingredients;
+        $juice->directions = $directions;
+        $juice->day = $day;
+        $juice->day_part = $day_part;
 
-		//Detach all tags
-		$old_concoction_tags = $concoction->tags;
-		foreach ($old_concoction_tags as $tag){
-			$concoction->tags()->detach($tag);
-		}
-		//Attach new tags
-		foreach ($tag_names as $tag_name){
-			$tag = Tag::where('name', '=', $tag_name)->first();
-			$concoction->tags()->attach($tag);
-		}
+
+		$juice->save();
+
+
 
 		return Redirect::to('/overview');
 	}
@@ -324,97 +270,30 @@ Route::post('/edit-concoction/{id}', array('before' => 'auth|editor', function($
 
 Route::get('/overview', array('before' => 'auth', function()
 {
-	$concoctions = get_logged_in_users_concoctions();
-	return View::make('overview')
-			->with('concoctions', $concoctions);
+    $juices = get_logged_in_users_juices();
+    return View::make('overview')
+        ->with('juices', $juices);
 
 }));
 
-Route::get('/view-concoction/{id}', array('before' => 'auth|editor', function($id)
+Route::get('/view-juice/{id}', array('before' => 'auth|editor', function($id)
 {
-	$concoctions = get_logged_in_users_concoctions();
-	$selected_concoction = Concoction::findOrFail($id);	
-	return View::make('view_concoction')
-			->with('selected_concoction', $selected_concoction)
-			->with('concoctions', $concoctions);
+	$juices = get_logged_in_users_juices();
+	$selected_juice = Juice::findOrFail($id);
+	return View::make('view_juice')
+			->with('selected_juice', $selected_juice)
+			->with('juices', $juices);
 	
 
 }));
 
-Route::get('/search-keeper', array('before' => 'auth', function()
-{
-	$query = "";
-	$collection = get_logged_in_users_concoctions();
-	$results = get_search_results($collection, $query);
-	$num_results = count($results);
 
-	return View::make('search_keeper')
-				->with('query', $query)
-				->with('results', $results)
-				->with('num_results', $num_results);
-				;
-}));
 
-Route::post('/search-keeper', array('before' => 'auth', function()
-{
-	$query = trim(Input::get('query'));
-	$collection = get_logged_in_users_concoctions();
-	$results = get_search_results($collection, $query);
-	$num_results = count($results);
 
-	return View::make('search_keeper')
-				->with('query', $query)
-				->with('results', $results)
-				->with('num_results', $num_results);
-				;
-}));
 
-function get_search_results($collection, $query)
-{
-	$query = strtolower($query);
-	//If query is empty string, return all results
-	if ($query == ""){
-		return $collection;
-	} 
-	else {
-		$pattern = "!\s+!";
-		$replacement = " ";
-		$query = preg_replace($pattern, $replacement, $query);
-		$tokens = explode(" ", $query);
-
-		$matches = array();
-
-		foreach ($collection as $concoction){
-
-			$tag_names = array();
-			$tags = $concoction->tags;
-	  		foreach ($tags as $tag) {
-		  		array_push($tag_names, $tag->name);
-		  	}
-		  	$tag_texts = join(" ", $tag_names);
-
-			$document = $concoction->title . " " . $concoction->ingredients . " " . $concoction->directions . " " . $tag_texts;
-			$document = strtolower($document);
-			$match = false;
-			foreach ($tokens as $token){
-				if (!$match){
-					$token = strtolower($token);
-					//Check for a match
-					if (strpos($document, $token) !== false ){
-						$match = true;
-					}
-				}
-			}
-			if ($match){
-				array_push($matches, $concoction);
-			}
-		}
-		return $matches;
-	}
-}
-function get_logged_in_users_concoctions(){
+function get_logged_in_users_juices(){
 	$user = Auth::user();
-	return Concoction::where('user_id', '=', $user->id)->get();
+	return Juice::where('user_id', '=', $user->id)->get();
 }
 
 Route::get('/debug', function() {

@@ -1,15 +1,11 @@
 @extends('_1_base_view')
 
 @section('body')
-
 	<div class="container">
-		<div class="page-header" role="navigation">
-	  		<ul class="nav nav-pills pull-right">
-	  			<li>
-	  				<a href="/log-out">Log out</a>
-	  			</li>
-	  		</ul>
-			<h3><a href='/'><img src='/restricted_images/header.png' width=400></img></a></h3>
+		 <div class="navbar">
+		 	<a class="pull-left" href='/'><img src='/restricted_images/getjuiced.png' width=400 alt=""></a>
+            <a class="pull-right logout" href="/log-out">Log out</a>
+
 	    </div>
 	</div>
 

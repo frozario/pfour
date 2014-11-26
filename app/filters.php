@@ -91,26 +91,26 @@ Route::filter('csrf', function()
 
 /*
 |--------------------------------------------------------------------------
-| Check that concoction the logged in user is trying to edit is his/hers
+| Check that juice the logged in user is trying to edit is his/hers
 |--------------------------------------------------------------------------
 |
 */
 
 Route::filter('editor', function($route)
 {
-	$concoction_id = $route->getParameter('id');
-	$concoction = Concoction::find($concoction_id);
+	$juice_id = $route->getParameter('id');
+	$juice = Juice::find($juice_id);
 
-	//Redirect if concoction not found
-	if (!$concoction){
+	//Redirect if juice not found
+	if (!$juice){
 		return Redirect::to('/overview');
 	}
 
 	$logged_in_user = Auth::user();
-	$concoction_creator = $concoction->user;
+	$juice_creator = $juice->user;
 
-	//Redirect if user trying to edit another user's concoction
-	if ($concoction_creator->id != $logged_in_user->id){
+	//Redirect if user trying to edit another user's juice
+	if ($juice_creator->id != $logged_in_user->id){
 		return Redirect::to('/overview');
 	}
 });

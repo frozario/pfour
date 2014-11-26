@@ -2,42 +2,59 @@
 
 @section('body')
 	<div class = "container">
+	    <div>
+            <a class="pull-left text-center" href='/'><img src="/restricted_images/getjuiced.png" alt=""></a>
+        </div>
 		<div>
 			@if(Session::get('flash_message'))
 		        <div class='alert alert-danger container'>
 		          {{ Session::get('flash_message') }}
 		        </div>
   			@endif
-			<img src='/restricted_images/witchesbrew.png' width=750>
-			<div class="row container">
-				<div class="col-md-4">
-					<h2>Log in</h2>
-					<div>
-				  		{{ Form::open(array('url' => '/')) }}
-
-				  		<table class='table'>
-				    		<tr>
-				    			<td>{{ Form::label('email_label', 'Email')}}</td>
-				    			<td>{{ Form::text('email') }}</td>
-				    		</tr>
-				    		<tr>
-				    			<td>{{ Form::label('password_label', 'Password')}}  </td>
-				    			<td>{{ Form::password('password') }}</td>
-				    		</tr>	
-			    		</table>
-			    		
-			    		{{ Form::submit('Submit', array('class'=>'btn btn-lg btn-primary')) }}
+			<div class="pull-right">
+				<div class="col-md-10">
+					<h1 class="text-center">Log in</h1>
+				  		{{ Form::open(array(
+                              	'url'=>'/',
+                              	'role'=>'form',
+                              	'class'=>'form-horizontal',
+                              	)) }}
+                        <div class="form-group">
+                            {{ Form::label('email_label', 'Email',array(
+                                "class"=>"col-sm-3 control-label"
+                            ))}}
+                            <div class="col-sm-6">
+                                {{ Form::email('email','', array(
+                                    "class"=>"form-control"
+                                ))}}
+                            </div>
+                             <div class="col-sm-3">
+                             </div>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('password_label', 'Password',array(
+                                "class"=>"col-sm-3 control-label"
+                            ))}}
+                            <div class="col-sm-6">
+                                {{ Form::password('password',array(
+                                    "class"=>"form-control"
+                                ))}}
+                            </div>
+                             <div class="col-sm-3">
+                             </div>
+                        </div>
+			    		{{ Form::submit('Submit', array('class'=>'btn btn-success pull-right')) }}
 
 						{{ Form::close() }}
-				  	</div>
 				</div>
-				<div class="col-md-6">
-					<h2>New to Concoction Keeper?</h2>
-					<a href="/sign-up" class="btn btn-lg btn-success">
+				<div class="col-md-2">
+					<a href="/sign-up" class="btn btn-success pull-right">
 						Sign up!
 					</a>
 				</div>
 			</div>
+            <img src='/restricted_images/juice.jpg' width = "100%" alt="" />
+
 		</div>
 	</div>
 @stop

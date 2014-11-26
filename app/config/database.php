@@ -54,10 +54,10 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'tunnel.pagodabox.com:3306',
-			'database'  => 'concoction_keeper',
-			'username'  => 'shondra',
-			'password'  => 'lP41yLq2',
+			'host'      => 'localhost',
+			'database'  => 'juice_keeper',
+			'username'  => 'root',
+			'password'  => 'root',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

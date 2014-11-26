@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>@yield("title", "Concoction Keeper")</title>
+	<title>@yield("title", "GetJuiced")</title>
 	{{ HTML::style('/packages/bootstrap-3.2.0-dist/css/bootstrap.min.css'); }}
 	{{ HTML::style('/packages/bootstrap-3.2.0-dist/css/starter-template.css'); }}
+	{{ HTML::style('css/style.css'); }}
 </head>
 <body>
   @yield('body')
