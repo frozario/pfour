@@ -1,5 +1,5 @@
 ## Description:
-A Laravel web application which allows users to manage their own personal cookbook.  Users can add new recipes (or "concoctions") and search ones they've added before when they need to find a meal to fit their needs.  
+A Laravel web application which allows users to manage their own personal cookbook.  Users can add new juice recipes and look for ones they've added before.  
 
 This application demonstrates knowledge of the Laravel framework, the MVC pattern, Object-relational mapping with Eloquent, database migrations, & user authentication.
 
@@ -10,9 +10,7 @@ OR
 
 Check out the application using either of the following credentials:
 
-* Marie Callendar: {email = "marie.callendar12345@yahoo.com", password = "password"}
 
-* Chef Boyardee: {email = "chef.boyardee12345@gmail.com", password = "password"}
 
 ## Design:
 
@@ -25,8 +23,8 @@ Check out the application using either of the following credentials:
 * Users can search their recipes
 * Users should not be able to view, edit, or delete other users' Concoction Keepers.
 
-### Wireframe:
-![](https://github.com/lmfilman/dwa15-p4/blob/master/design_wireframe.png)
+Link:
+https://p4.dwa15-frozario.me
 
 ## License details:
 * This project uses the Twitter Bootstrap framework: http://getbootstrap.com/.  Bootstrap license included in this repository.
@@ -50,4 +48,3 @@ Make list of concoctions on /overview page collapsible
 * Users can add friends in app and view friends cookbooks
 * Users can give copies of recipes to friends and those friends can accept
 * Users can plan when to cook recipes on a calendar
-
