@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'juice_keeper',
 			'username'  => 'root',
-			'password'  => 'root',
+			'password'  => 'erJE24afx7',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
