@@ -7,7 +7,7 @@ How to access the application:
 Sign up with a unique email address
 
 Demo:
-
+http://screencast.com/t/IQI4tR7iv4B
 
 Details for the teaching team:
 
