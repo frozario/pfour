@@ -21,7 +21,7 @@ Users can create, read, edit, & delete recipes
 
 Link:
 
-https://p4.dwa15-frozario.me
+http://p4.dwa15-frozario.me
 
 Outside code:
 
